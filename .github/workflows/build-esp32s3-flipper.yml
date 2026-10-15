@@ -1,0 +1,47 @@
+name: Build ESP32-S3 Flipper
+
+# Tu dong build moi khi push (khong dung workflow_dispatch)
+on:
+  push:
+    paths-ignore:
+      - "**.md"
+
+jobs:
+  build:
+    name: Build esp32s3-flipper
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Cache PlatformIO
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.platformio
+            .pio/libdeps
+          key: ${{ runner.os }}-pio-flipper-${{ hashFiles('platformio.ini', 'boards/esp32s3-flipper/*.ini') }}
+          restore-keys: |
+            ${{ runner.os }}-pio-flipper-
+
+      - name: Install PlatformIO
+        run: pip install platformio requests esptool intelhex
+
+      - name: Build
+        run: platformio run -e esp32s3-flipper
+
+      - name: Upload firmware
+        uses: actions/upload-artifact@v4
+        with:
+          name: Bruce-esp32s3-flipper
+          path: |
+            Bruce-esp32s3-flipper.bin
+            .pio/build/esp32s3-flipper/firmware.bin
+            .pio/build/esp32s3-flipper/bootloader.bin
+            .pio/build/esp32s3-flipper/partitions.bin
+          if-no-files-found: error
