@@ -53,7 +53,6 @@ void tft_display::begin(uint32_t speed) {
 #elif defined(LOVYAN_I2C_BUS)
 #if !defined(TFT_I2C_PORT) || !defined(TFT_I2C_WRITE) || !defined(TFT_I2C_READ) || !defined(TFT_SDA) ||      \
     !defined(TFT_SCL) || !defined(TFT_ADDR)
-#else
 #error "To use LOVYAN_I2C_BUS, need to define:\n \
         - TFT_I2C_PORT\n \
         - TFT_I2C_WRITE\n \
