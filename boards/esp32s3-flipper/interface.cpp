@@ -20,6 +20,11 @@ void _setup_gpio() {
     pinMode(SDCARD_CS, OUTPUT);
     digitalWrite(SDCARD_CS, HIGH);
 
+#ifdef NRF24_SS_PIN
+    pinMode(NRF24_SS_PIN, OUTPUT);
+    digitalWrite(NRF24_SS_PIN, HIGH);
+#endif
+
     bruceConfigPins.rfModule = CC1101_SPI_MODULE;
     bruceConfigPins.rfidModule = PN532_I2C_MODULE;
     bruceConfigPins.irTx = TXLED;
@@ -28,9 +33,26 @@ void _setup_gpio() {
 
 /***************************************************************************************
 ** Function name: getBattery()
-** Description:   Khong co mach do pin -> tra 0 (chua ho tro)
+** Description:   Chua gan mach do pin -> tra 0. Bo comment ANALOG_BAT_PIN trong
+**                pins_arduino.h de doc pin (phan ap x2, 3.0V = 0%, 4.2V = 100%)
 ***************************************************************************************/
-int getBattery() { return 0; }
+int getBattery() {
+#ifdef ANALOG_BAT_PIN
+    static bool adcInit = false;
+    if (!adcInit) {
+        pinMode(ANALOG_BAT_PIN, INPUT);
+        analogSetAttenuation(ADC_11db);
+        adcInit = true;
+    }
+    float mv = (float)analogReadMilliVolts(ANALOG_BAT_PIN) * 2.0f;
+    int percent = (int)((mv - 3000.0f) / (4200.0f - 3000.0f) * 100.0f);
+    if (percent < 0) percent = 0;
+    if (percent > 100) percent = 100;
+    return percent;
+#else
+    return 0;
+#endif
+}
 
 bool isCharging() { return false; }
 

@@ -93,9 +93,34 @@ static const uint8_t SCK = SPI_SCK_PIN;
 #define MINBRIGHT (uint8_t)1
 #define SMOOTH_FONT 0
 
-#define FP 1
-#define FM 1
-#define FG 2
+// FP/FM/FG (co chu) dat o build_src_flags trong esp32s3-flipper.ini, KHONG define o day
+// vi macro FP se pha thu vien FastLED (template <typename FP>).
+
+// ======================= MODULE NOI SAU (da chia san chan) =======================
+// NRF24L01 2.4GHz: dung chung SPI 11/12/13, chi them CE + CSN. Da bat san.
+#define USE_NRF24_VIA_SPI
+#define NRF24_CE_PIN 38
+#define NRF24_SS_PIN 39
+#define NRF24_MOSI_PIN SPI_MOSI_PIN
+#define NRF24_SCK_PIN SPI_SCK_PIN
+#define NRF24_MISO_PIN SPI_MISO_PIN
+
+// GPS (UART): TX/RX = GPIO43/44, da khai bao o phan SERIAL ben duoi. Cam GPS la dung.
+
+// Do pin: cau phan ap 2 dien tro 100k vao chan nay (ADC1), roi bo comment dong duoi.
+// #define ANALOG_BAT_PIN 7
+
+// FM Radio Si4713 (I2C 8/9 dung chung): bo comment 2 dong khi gan module.
+// #define FM_SI4713 1
+// #define FM_RSTPIN 40
+
+// Mic I2S (SPM1423/INMP441): bo comment 3 dong khi gan module.
+// #define MIC_SPM1423 1
+// #define PIN_CLK 41
+// #define PIN_DATA 42
+
+// GPIO5 con trong, de danh cho nhu cau khac.
+// =================================================================================
 
 #define SERIAL_TX TX
 #define SERIAL_RX RX
