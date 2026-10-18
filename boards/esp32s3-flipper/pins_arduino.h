@@ -13,7 +13,7 @@
 static const uint8_t TX = 43;
 static const uint8_t RX = 44;
 
-// ---------- I2C chung: OLED SSD1306 (0x3C) + PN532 (0x24) ----------
+// ---------- I2C: PN532 (0x24) ----------
 #define GROVE_SDA 8
 #define GROVE_SCL 9
 #define SYS_I2C_SDA 8
@@ -21,7 +21,7 @@ static const uint8_t RX = 44;
 static const uint8_t SDA = GROVE_SDA;
 static const uint8_t SCL = GROVE_SCL;
 
-// ---------- SPI chung: CC1101 + microSD ----------
+// ---------- SPI chung: TFT + CC1101 + microSD + NRF24 ----------
 #define SPI_SCK_PIN 12
 #define SPI_MOSI_PIN 11
 #define SPI_MISO_PIN 13
@@ -65,33 +65,14 @@ static const uint8_t SCK = SPI_SCK_PIN;
 #define BTN_ACT LOW
 #define BTN_ALIAS "\"OK\""
 
-// ---------- Man hinh OLED SSD1306 128x64 I2C (LovyanGFX) ----------
+// ---------- Man hinh TFT 1.44" ST7735 128x128 (SPI, TFT_eSPI) ----------
+// Cac co TFT_* (chan, driver, kich thuoc) dat trong esp32s3-flipper.ini.
+// Dung chung SPI 11/12/13 voi CC1101, microSD, NRF24. Rieng CS = GPIO5, DC (A0) = GPIO7.
+// Chan RST va LED (den nen) cua man noi thang 3V3 nen khong dung GPIO.
 #define HAS_SCREEN 1
-#define USE_LOVYANGFX 1
-#define LOVYAN_PANEL Panel_SSD1306
-#define LOVYAN_BUS Bus_I2C
-#define LOVYAN_I2C_BUS 1
-#define TFT_I2C_PORT 1
-#define TFT_I2C_WRITE 400000
-#define TFT_I2C_READ 400000
-#define TFT_SDA GROVE_SDA
-#define TFT_SCL GROVE_SCL
-#define TFT_ADDR 0x3C
-#define TFT_CS -1
-#define TFT_RST -1
 #define TFT_BUSY_PIN -1
-#define TFT_WIDTH 128
-#define TFT_HEIGHT 64
-#define TFT_OFFSET_X 0
-#define TFT_OFFSET_Y 0
-#define TFT_INVERTION 0
-#define TFT_RGB_ORDER 0
-#define TFT_MEM_WIDTH 128
-#define TFT_MEM_HEIGHT 64
-#define TFT_BL -1
 #define ROTATION 0
 #define MINBRIGHT (uint8_t)1
-#define SMOOTH_FONT 0
 
 // FP/FM/FG (co chu) dat o build_src_flags trong esp32s3-flipper.ini, KHONG define o day
 // vi macro FP se pha thu vien FastLED (template <typename FP>).
@@ -107,19 +88,10 @@ static const uint8_t SCK = SPI_SCK_PIN;
 
 // GPS (UART): TX/RX = GPIO43/44, da khai bao o phan SERIAL ben duoi. Cam GPS la dung.
 
-// Do pin: cau phan ap 2 dien tro 100k vao chan nay (ADC1), roi bo comment dong duoi.
-// #define ANALOG_BAT_PIN 7
+// Do pin: bo (GPIO7 da dung cho TFT DC).
 
-// FM Radio Si4713 (I2C 8/9 dung chung): bo comment 2 dong khi gan module.
-// #define FM_SI4713 1
-// #define FM_RSTPIN 40
 
-// Mic I2S (SPM1423/INMP441): bo comment 3 dong khi gan module.
-// #define MIC_SPM1423 1
-// #define PIN_CLK 41
-// #define PIN_DATA 42
-
-// GPIO5 con trong, de danh cho nhu cau khac.
+// GPIO40/41/42 chua dung, con trong cho nhu cau khac (FM, mic...).
 // =================================================================================
 
 #define SERIAL_TX TX

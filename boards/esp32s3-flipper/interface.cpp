@@ -20,6 +20,11 @@ void _setup_gpio() {
     pinMode(SDCARD_CS, OUTPUT);
     digitalWrite(SDCARD_CS, HIGH);
 
+#if defined(TFT_CS) && TFT_CS >= 0
+    pinMode(TFT_CS, OUTPUT);
+    digitalWrite(TFT_CS, HIGH);
+#endif
+
 #ifdef NRF24_SS_PIN
     pinMode(NRF24_SS_PIN, OUTPUT);
     digitalWrite(NRF24_SS_PIN, HIGH);
@@ -58,7 +63,7 @@ bool isCharging() { return false; }
 
 /*********************************************************************
 ** Function: setBrightness
-** OLED khong co den nen -> bo trong
+** Den nen TFT noi thang 3V3 (luon sang) -> bo trong
 **********************************************************************/
 void _setBrightness(uint8_t brightval) {}
 
